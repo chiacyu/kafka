@@ -36,6 +36,7 @@ import java.util.Set;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonMap;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -81,7 +82,7 @@ public class CoordinatorStrategyTest {
 
         CoordinatorKey group1 = CoordinatorKey.byGroupId("foo");
         CoordinatorKey group2 = CoordinatorKey.byGroupId("bar");
-        assertThrows(IllegalArgumentException.class, () -> strategy.buildRequest(Set.of(group1, group2)));
+        assertThrows(IllegalArgumentException.class, () -> strategy.buildRequest(mkSet(group1, group2)));
     }
 
     @Test
@@ -123,7 +124,7 @@ public class CoordinatorStrategyTest {
         CoordinatorKey group1 = CoordinatorKey.byGroupId("foo");
         CoordinatorKey group2 = CoordinatorKey.byGroupId("bar");
         assertThrows(IllegalArgumentException.class, () ->
-            strategy.handleResponse(Set.of(group1, group2), response));
+            strategy.handleResponse(mkSet(group1, group2), response));
     }
 
     @Test

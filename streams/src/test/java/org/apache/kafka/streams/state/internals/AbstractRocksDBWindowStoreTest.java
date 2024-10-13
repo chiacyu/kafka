@@ -139,14 +139,14 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         final long startTime = SEGMENT_INTERVAL * 2;
         final long increment = SEGMENT_INTERVAL / 2;
         windowStore.put(0, "zero", startTime);
-        assertEquals(Set.of(segments.segmentName(2)), segmentDirs(baseDir));
+        assertEquals(Utils.mkSet(segments.segmentName(2)), segmentDirs(baseDir));
 
         windowStore.put(1, "one", startTime + increment);
-        assertEquals(Set.of(segments.segmentName(2)), segmentDirs(baseDir));
+        assertEquals(Utils.mkSet(segments.segmentName(2)), segmentDirs(baseDir));
 
         windowStore.put(2, "two", startTime + increment * 2);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(2),
                         segments.segmentName(3)
                 ),
@@ -155,7 +155,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
 
         windowStore.put(4, "four", startTime + increment * 4);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(2),
                         segments.segmentName(3),
                         segments.segmentName(4)
@@ -165,7 +165,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
 
         windowStore.put(5, "five", startTime + increment * 5);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(2),
                         segments.segmentName(3),
                         segments.segmentName(4)
@@ -233,7 +233,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
 
         windowStore.put(6, "six", startTime + increment * 6);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(3),
                         segments.segmentName(4),
                         segments.segmentName(5)
@@ -306,7 +306,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
 
         windowStore.put(7, "seven", startTime + increment * 7);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(3),
                         segments.segmentName(4),
                         segments.segmentName(5)
@@ -366,7 +366,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
 
         windowStore.put(8, "eight", startTime + increment * 8);
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(4),
                         segments.segmentName(5),
                         segments.segmentName(6)
@@ -444,7 +444,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         // check segment directories
         windowStore.flush();
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(4),
                         segments.segmentName(5),
                         segments.segmentName(6)
@@ -463,20 +463,20 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         context.setTime(0L);
         windowStore.put(0, "v", 0);
         assertEquals(
-                Set.of(segments.segmentName(0L)),
+                Utils.mkSet(segments.segmentName(0L)),
                 segmentDirs(baseDir)
         );
 
         windowStore.put(0, "v", SEGMENT_INTERVAL - 1);
         windowStore.put(0, "v", SEGMENT_INTERVAL - 1);
         assertEquals(
-                Set.of(segments.segmentName(0L)),
+                Utils.mkSet(segments.segmentName(0L)),
                 segmentDirs(baseDir)
         );
 
         windowStore.put(0, "v", SEGMENT_INTERVAL);
         assertEquals(
-                Set.of(segments.segmentName(0L), segments.segmentName(1L)),
+                Utils.mkSet(segments.segmentName(0L), segments.segmentName(1L)),
                 segmentDirs(baseDir)
         );
 
@@ -492,7 +492,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         assertEquals(4, fetchedCount);
 
         assertEquals(
-                Set.of(segments.segmentName(0L), segments.segmentName(1L)),
+                Utils.mkSet(segments.segmentName(0L), segments.segmentName(1L)),
                 segmentDirs(baseDir)
         );
 
@@ -514,7 +514,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         }
 
         assertEquals(
-                Set.of(segments.segmentName(1L), segments.segmentName(3L)),
+                Utils.mkSet(segments.segmentName(1L), segments.segmentName(3L)),
                 segmentDirs(baseDir)
         );
 
@@ -531,7 +531,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         // RocksDbWindowStore shouldn't have an implciation and all stores should return the same fetched counts.
         assertEquals(1, fetchedCount);
         assertEquals(
-                Set.of(segments.segmentName(3L), segments.segmentName(5L)),
+                Utils.mkSet(segments.segmentName(3L), segments.segmentName(5L)),
                 segmentDirs(baseDir)
         );
 
@@ -575,7 +575,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         }
 
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(4L),
                         segments.segmentName(5L),
                         segments.segmentName(6L)),
@@ -754,7 +754,7 @@ public abstract class AbstractRocksDBWindowStoreTest extends AbstractWindowBytes
         // check segment directories
         windowStore.flush();
         assertEquals(
-                Set.of(
+                Utils.mkSet(
                         segments.segmentName(4L),
                         segments.segmentName(5L),
                         segments.segmentName(6L)),

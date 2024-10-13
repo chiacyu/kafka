@@ -38,6 +38,7 @@ import org.apache.kafka.common.requests.RequestTestUtils;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
 import org.apache.kafka.common.utils.Time;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.test.MockClusterResourceListener;
 
 import org.junit.jupiter.api.Test;
@@ -936,7 +937,7 @@ public class MetadataTest {
         oldTopicPartitionCounts.put("oldValidTopic", 2);
         oldTopicPartitionCounts.put("keepValidTopic", 3);
 
-        retainTopics.set(Set.of(
+        retainTopics.set(Utils.mkSet(
             "oldInvalidTopic",
             "keepInvalidTopic",
             "oldUnauthorizedTopic",
@@ -973,7 +974,7 @@ public class MetadataTest {
         newTopicPartitionCounts.put("keepValidTopic", 2);
         newTopicPartitionCounts.put("newValidTopic", 4);
 
-        retainTopics.set(Set.of(
+        retainTopics.set(Utils.mkSet(
             "keepInvalidTopic",
             "newInvalidTopic",
             "keepUnauthorizedTopic",
@@ -1036,7 +1037,7 @@ public class MetadataTest {
         topicPartitionCounts.put("validTopic1", 2);
         topicPartitionCounts.put("validTopic2", 3);
 
-        retainTopics.set(Set.of(
+        retainTopics.set(Utils.mkSet(
                 "validTopic1",
                 "validTopic2"));
 
@@ -1057,7 +1058,7 @@ public class MetadataTest {
 
         Cluster cluster = metadata.fetch();
         // We still have the topic, but it just doesn't have an ID.
-        assertEquals(Set.of("validTopic1", "validTopic2"), cluster.topics());
+        assertEquals(Utils.mkSet("validTopic1", "validTopic2"), cluster.topics());
         assertEquals(2, cluster.partitionsForTopic("validTopic1").size());
         assertEquals(new HashSet<>(topicIds.values()), new HashSet<>(cluster.topicIds()));
         assertEquals(Uuid.ZERO_UUID, cluster.topicId("validTopic1"));

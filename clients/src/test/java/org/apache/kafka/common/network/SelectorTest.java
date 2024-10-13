@@ -786,7 +786,7 @@ public class SelectorTest {
         when(selectionKey.readyOps()).thenReturn(SelectionKey.OP_CONNECT);
         when(selectionKey.attachment()).thenReturn(kafkaChannel);
 
-        Set<SelectionKey> selectionKeys = Set.of(selectionKey);
+        Set<SelectionKey> selectionKeys = Utils.mkSet(selectionKey);
         selector.pollSelectionKeys(selectionKeys, false, System.nanoTime());
 
         assertFalse(selector.connected().contains(kafkaChannel.id()));

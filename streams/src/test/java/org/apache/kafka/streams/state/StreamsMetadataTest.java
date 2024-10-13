@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.Set;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -35,12 +36,12 @@ import static org.hamcrest.Matchers.not;
 public class StreamsMetadataTest {
 
     private static final HostInfo HOST_INFO = new HostInfo("local", 12);
-    public static final Set<String> STATE_STORE_NAMES = Set.of("store1", "store2");
+    public static final Set<String> STATE_STORE_NAMES = mkSet("store1", "store2");
     private static final TopicPartition TP_0 = new TopicPartition("t", 0);
     private static final TopicPartition TP_1 = new TopicPartition("t", 1);
-    public static final Set<TopicPartition> TOPIC_PARTITIONS = Set.of(TP_0, TP_1);
-    public static final Set<String> STAND_BY_STORE_NAMES = Set.of("store2");
-    public static final Set<TopicPartition> STANDBY_TOPIC_PARTITIONS = Set.of(TP_1);
+    public static final Set<TopicPartition> TOPIC_PARTITIONS = mkSet(TP_0, TP_1);
+    public static final Set<String> STAND_BY_STORE_NAMES = mkSet("store2");
+    public static final Set<TopicPartition> STANDBY_TOPIC_PARTITIONS = mkSet(TP_1);
 
     private StreamsMetadata streamsMetadata;
 
@@ -91,7 +92,7 @@ public class StreamsMetadataTest {
     public void shouldNotBeEqualIfDifferStateStoreNames() {
         final StreamsMetadata differStateStoreNames = new StreamsMetadataImpl(
             HOST_INFO,
-            Set.of("store1"),
+            mkSet("store1"),
             TOPIC_PARTITIONS,
             STAND_BY_STORE_NAMES,
             STANDBY_TOPIC_PARTITIONS);
@@ -104,7 +105,7 @@ public class StreamsMetadataTest {
         final StreamsMetadata differTopicPartitions = new StreamsMetadataImpl(
             HOST_INFO,
             STATE_STORE_NAMES,
-            Set.of(TP_0),
+            mkSet(TP_0),
             STAND_BY_STORE_NAMES,
             STANDBY_TOPIC_PARTITIONS);
         assertThat(streamsMetadata, not(equalTo(differTopicPartitions)));
@@ -117,7 +118,7 @@ public class StreamsMetadataTest {
             HOST_INFO,
             STATE_STORE_NAMES,
             TOPIC_PARTITIONS,
-            Set.of("store1"),
+            mkSet("store1"),
             STANDBY_TOPIC_PARTITIONS);
         assertThat(streamsMetadata, not(equalTo(differStandByStores)));
         assertThat(streamsMetadata.hashCode(), not(equalTo(differStandByStores.hashCode())));
@@ -130,7 +131,7 @@ public class StreamsMetadataTest {
             STATE_STORE_NAMES,
             TOPIC_PARTITIONS,
             STAND_BY_STORE_NAMES,
-            Set.of(TP_0));
+            mkSet(TP_0));
         assertThat(streamsMetadata, not(equalTo(differStandByTopicPartitions)));
         assertThat(streamsMetadata.hashCode(), not(equalTo(differStandByTopicPartitions.hashCode())));
     }

@@ -61,6 +61,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -157,11 +158,11 @@ public class DescribeConsumerGroupsHandlerTest {
             Optional.of("instanceId"),
             "clientId",
             "host",
-            new MemberAssignment(Set.of(
+            new MemberAssignment(mkSet(
                 new TopicPartition("foo", 0),
                 new TopicPartition("bar",  1))
             ),
-            Optional.of(new MemberAssignment(Set.of(
+            Optional.of(new MemberAssignment(mkSet(
                 new TopicPartition("foo", 1),
                 new TopicPartition("bar",  2)
             )))

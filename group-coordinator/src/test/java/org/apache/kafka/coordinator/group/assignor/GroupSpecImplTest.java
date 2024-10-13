@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +56,7 @@ public class GroupSpecImplTest {
         members.put(TEST_MEMBER,  new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topicId),
+            mkSet(topicId),
             Assignment.EMPTY
         ));
 
@@ -98,12 +99,12 @@ public class GroupSpecImplTest {
         Map<Uuid, Set<Integer>> topicPartitions = new HashMap<>();
         topicPartitions.put(
             topicId,
-            Set.of(0, 1)
+            mkSet(0, 1)
         );
         members.put(TEST_MEMBER, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topicId),
+            mkSet(topicId),
             new Assignment(topicPartitions)
         ));
 

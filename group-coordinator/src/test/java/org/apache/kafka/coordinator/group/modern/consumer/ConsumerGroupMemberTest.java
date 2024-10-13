@@ -39,6 +39,7 @@ import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkAssignment;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkTopicAssignment;
 import static org.apache.kafka.coordinator.group.modern.consumer.ConsumerGroupMember.classicProtocolListFromJoinRequestProtocolCollection;
@@ -77,7 +78,7 @@ public class ConsumerGroupMemberTest {
         assertEquals("rack-id", member.rackId());
         assertEquals("client-id", member.clientId());
         assertEquals("hostname", member.clientHost());
-        assertEquals(Set.of("bar", "foo"), member.subscribedTopicNames());
+        assertEquals(mkSet("bar", "foo"), member.subscribedTopicNames());
         assertEquals("regex", member.subscribedTopicRegex());
         assertEquals("range", member.serverAssignorName().get());
         assertEquals(mkAssignment(mkTopicAssignment(topicId1, 1, 2, 3)), member.assignedPartitions());
@@ -184,7 +185,7 @@ public class ConsumerGroupMemberTest {
         assertEquals("new-instance-id", updatedMember.instanceId());
         assertEquals("new-rack-id", updatedMember.rackId());
         // Names are sorted.
-        assertEquals(Set.of("zar"), updatedMember.subscribedTopicNames());
+        assertEquals(mkSet("zar"), updatedMember.subscribedTopicNames());
         assertEquals("new-regex", updatedMember.subscribedTopicRegex());
         assertEquals("new-assignor", updatedMember.serverAssignorName().get());
     }
@@ -211,7 +212,7 @@ public class ConsumerGroupMemberTest {
         assertEquals("rack-id", member.rackId());
         assertEquals("client-id", member.clientId());
         assertEquals("host-id", member.clientHost());
-        assertEquals(Set.of("bar", "foo"), member.subscribedTopicNames());
+        assertEquals(mkSet("bar", "foo"), member.subscribedTopicNames());
         assertEquals("regex", member.subscribedTopicRegex());
         assertEquals("range", member.serverAssignorName().get());
         assertEquals(

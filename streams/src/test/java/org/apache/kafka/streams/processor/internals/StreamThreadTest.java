@@ -54,6 +54,7 @@ import org.apache.kafka.common.utils.LogCaptureAppender;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
 import org.apache.kafka.common.utils.Time;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.StreamsConfig.InternalConfig;
@@ -137,6 +138,7 @@ import static java.util.Collections.singletonMap;
 import static org.apache.kafka.common.utils.Utils.mkEntry;
 import static org.apache.kafka.common.utils.Utils.mkMap;
 import static org.apache.kafka.common.utils.Utils.mkProperties;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.streams.processor.internals.ClientUtils.adminClientId;
 import static org.apache.kafka.streams.processor.internals.StateManagerUtil.CHECKPOINT_FILE_NAME;
 import static org.apache.kafka.test.StreamsTestUtils.TaskBuilder.statelessTask;
@@ -542,7 +544,7 @@ public class StreamThreadTest {
         thread.setNow(mockTime.milliseconds());
         thread.maybeCommit();
 
-        verify(taskManager).commit(Set.of(runningTask));
+        verify(taskManager).commit(mkSet(runningTask));
     }
 
     @ParameterizedTest
@@ -1017,7 +1019,7 @@ public class StreamThreadTest {
         thread.setNow(mockTime.milliseconds());
         thread.maybeCommit();
 
-        verify(taskManager).commit(Set.of(runningTask));
+        verify(taskManager).commit(mkSet(runningTask));
     }
 
     @ParameterizedTest
@@ -1341,7 +1343,7 @@ public class StreamThreadTest {
         assertTrue(thread.isAlive());
 
         Thread.sleep(1000);
-        assertEquals(Set.of(task1, task2), thread.taskManager().activeTaskIds());
+        assertEquals(Utils.mkSet(task1, task2), thread.taskManager().activeTaskIds());
         assertEquals(StreamThread.State.PENDING_SHUTDOWN, thread.state());
 
         thread.rebalanceListener().onPartitionsAssigned(assignedPartitions);
@@ -1936,7 +1938,7 @@ public class StreamThreadTest {
 
         final ThreadMetadata metadata = thread.threadMetadata();
         assertEquals(StreamThread.State.RUNNING.name(), metadata.threadState());
-        assertTrue(metadata.activeTasks().contains(new TaskMetadataImpl(task1, Set.of(t1p1), new HashMap<>(), new HashMap<>(), Optional.empty())));
+        assertTrue(metadata.activeTasks().contains(new TaskMetadataImpl(task1, Utils.mkSet(t1p1), new HashMap<>(), new HashMap<>(), Optional.empty())));
         assertTrue(metadata.standbyTasks().isEmpty());
 
         assertTrue(Arrays.asList("RUNNING", "STARTING", "PARTITIONS_REVOKED", "PARTITIONS_ASSIGNED", "CREATED").contains(metadata.threadState()),
@@ -1991,7 +1993,7 @@ public class StreamThreadTest {
 
         final ThreadMetadata threadMetadata = thread.threadMetadata();
         assertEquals(StreamThread.State.RUNNING.name(), threadMetadata.threadState());
-        assertTrue(threadMetadata.standbyTasks().contains(new TaskMetadataImpl(task1, Set.of(t1p1), new HashMap<>(), new HashMap<>(), Optional.empty())));
+        assertTrue(threadMetadata.standbyTasks().contains(new TaskMetadataImpl(task1, Utils.mkSet(t1p1), new HashMap<>(), new HashMap<>(), Optional.empty())));
         assertTrue(threadMetadata.activeTasks().isEmpty());
     }
 
@@ -2417,7 +2419,7 @@ public class StreamThreadTest {
             )
         );
         mockConsumer.updateBeginningOffsets(Collections.singletonMap(topicPartition, 0L));
-        mockConsumer.subscribe(Set.of(topicPartition.topic()));
+        mockConsumer.subscribe(mkSet(topicPartition.topic()));
         mockConsumer.rebalance(Collections.singleton(topicPartition));
 
         mockRestoreConsumer.updatePartitions(
@@ -2965,7 +2967,7 @@ public class StreamThreadTest {
         ));
 
         // expect not to try and commit task3, because it's not running.
-        when(taskManager.commit(Set.of(task1, task2))).thenReturn(2);
+        when(taskManager.commit(mkSet(task1, task2))).thenReturn(2);
 
         final TopologyMetadata topologyMetadata = new TopologyMetadata(internalTopologyBuilder, config);
         topologyMetadata.buildAndRewriteTopology();
@@ -2974,7 +2976,7 @@ public class StreamThreadTest {
         thread.setNow(mockTime.milliseconds());
         thread.maybeCommit();
 
-        verify(taskManager).commit(Set.of(task1, task2));
+        verify(taskManager).commit(mkSet(task1, task2));
     }
 
     @ParameterizedTest
@@ -3607,7 +3609,7 @@ public class StreamThreadTest {
     private TaskManager mockTaskManagerCommit(final Task runningTask, final int commits) {
         final TaskManager taskManager = mockTaskManager(runningTask);
 
-        when(taskManager.commit(Set.of(runningTask))).thenReturn(commits);
+        when(taskManager.commit(mkSet(runningTask))).thenReturn(commits);
         return taskManager;
     }
 

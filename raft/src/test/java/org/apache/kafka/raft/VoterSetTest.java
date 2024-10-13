@@ -20,6 +20,7 @@ import org.apache.kafka.common.Node;
 import org.apache.kafka.common.Uuid;
 import org.apache.kafka.common.feature.SupportedVersionRange;
 import org.apache.kafka.common.network.ListenerName;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.server.common.Features;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -67,7 +67,7 @@ public final class VoterSetTest {
         VoterSet voterSet = VoterSet.fromMap(voterMap(IntStream.of(1, 2, 3), true));
 
         assertEquals(
-            Set.of(new Node(1, "localhost", 9991), new Node(2, "localhost", 9992)),
+            Utils.mkSet(new Node(1, "localhost", 9991), new Node(2, "localhost", 9992)),
             voterSet.voterNodes(IntStream.of(1, 2).boxed(), DEFAULT_LISTENER_NAME)
         );
 

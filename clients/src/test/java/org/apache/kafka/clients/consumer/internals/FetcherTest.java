@@ -131,6 +131,7 @@ import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.apache.kafka.common.requests.FetchMetadata.INVALID_SESSION_ID;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.test.TestUtils.assertOptional;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1449,7 +1450,7 @@ public class FetcherTest {
 
         Map<TopicPartition, List<ConsumerRecord<byte[], byte[]>>> fetchedRecords;
 
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
 
         // seek to tp0 and tp1 in two polls to generate 2 complete requests and responses
 
@@ -1481,7 +1482,7 @@ public class FetcherTest {
     public void testFetchOnCompletedFetchesForAllPausedPartitions() {
         buildFetcher();
 
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
 
         // seek to tp0 and tp1 in two polls to generate 2 complete requests and responses
 
@@ -1515,7 +1516,7 @@ public class FetcherTest {
 
         Map<TopicPartition, List<ConsumerRecord<byte[], byte[]>>> fetchedRecords;
 
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
 
         subscriptions.seek(tp0, 1);
         assertEquals(1, sendFetches());
@@ -1722,7 +1723,7 @@ public class FetcherTest {
         // some fetched partitions cause Exception. This ensures that consumer won't lose record upon exception
         buildFetcher(OffsetResetStrategy.NONE, new ByteArrayDeserializer(),
                 new ByteArrayDeserializer(), Integer.MAX_VALUE, IsolationLevel.READ_UNCOMMITTED);
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
         subscriptions.seek(tp0, 1);
         subscriptions.seek(tp1, 1);
 
@@ -1768,7 +1769,7 @@ public class FetcherTest {
         // Ensure the removal of completed fetches that cause an Exception if and only if they contain empty records.
         buildFetcher(OffsetResetStrategy.NONE, new ByteArrayDeserializer(),
                 new ByteArrayDeserializer(), Integer.MAX_VALUE, IsolationLevel.READ_UNCOMMITTED);
-        assignFromUser(Set.of(tp0, tp1, tp2, tp3));
+        assignFromUser(mkSet(tp0, tp1, tp2, tp3));
 
         subscriptions.seek(tp0, 1);
         subscriptions.seek(tp1, 1);
@@ -1845,7 +1846,7 @@ public class FetcherTest {
         buildFetcher(OffsetResetStrategy.NONE, new ByteArrayDeserializer(),
                 new ByteArrayDeserializer(), 2, IsolationLevel.READ_UNCOMMITTED);
 
-        assignFromUser(Set.of(tp0));
+        assignFromUser(mkSet(tp0));
         subscriptions.seek(tp0, 1);
         assertEquals(1, sendFetches());
         Map<TopicIdPartition, FetchResponseData.PartitionData> partitions = new HashMap<>();
@@ -1858,7 +1859,7 @@ public class FetcherTest {
 
         assertEquals(2, fetchRecords().get(tp0).size());
 
-        subscriptions.assignFromUser(Set.of(tp0, tp1));
+        subscriptions.assignFromUser(mkSet(tp0, tp1));
         subscriptions.seekUnvalidated(tp1, new SubscriptionState.FetchPosition(1, Optional.empty(), metadata.currentLeader(tp1)));
 
         assertEquals(1, sendFetches());
@@ -2082,7 +2083,7 @@ public class FetcherTest {
         TopicPartition tp1 = new TopicPartition(topic1, 0);
         TopicPartition tp2 = new TopicPartition(topic2, 0);
 
-        subscriptions.assignFromUser(Set.of(tp1, tp2));
+        subscriptions.assignFromUser(mkSet(tp1, tp2));
 
         Map<String, Integer> partitionCounts = new HashMap<>();
         partitionCounts.put(topic1, 1);
@@ -2096,7 +2097,7 @@ public class FetcherTest {
         int expectedBytes = 0;
         LinkedHashMap<TopicIdPartition, FetchResponseData.PartitionData> fetchPartitionData = new LinkedHashMap<>();
 
-        for (TopicIdPartition tp : Set.of(tidp1, tidp2)) {
+        for (TopicIdPartition tp : mkSet(tidp1, tidp2)) {
             subscriptions.seek(tp.topicPartition(), 0);
 
             MemoryRecordsBuilder builder = MemoryRecords.builder(ByteBuffer.allocate(1024), Compression.NONE,
@@ -2160,7 +2161,7 @@ public class FetcherTest {
     @Test
     public void testFetchResponseMetricsWithOnePartitionError() {
         buildFetcher();
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
         subscriptions.seek(tp0, 0);
         subscriptions.seek(tp1, 0);
 
@@ -2203,7 +2204,7 @@ public class FetcherTest {
     public void testFetchResponseMetricsWithOnePartitionAtTheWrongOffset() {
         buildFetcher();
 
-        assignFromUser(Set.of(tp0, tp1));
+        assignFromUser(mkSet(tp0, tp1));
         subscriptions.seek(tp0, 0);
         subscriptions.seek(tp1, 0);
 
@@ -2437,7 +2438,7 @@ public class FetcherTest {
         for (ConsumerRecord<byte[], byte[]> consumerRecord : fetchedConsumerRecords) {
             fetchedKeys.add(new String(consumerRecord.key(), StandardCharsets.UTF_8));
         }
-        assertEquals(Set.of("commit1-1", "commit1-2", "commit2-1"), fetchedKeys);
+        assertEquals(mkSet("commit1-1", "commit1-2", "commit2-1"), fetchedKeys);
     }
 
     @Test

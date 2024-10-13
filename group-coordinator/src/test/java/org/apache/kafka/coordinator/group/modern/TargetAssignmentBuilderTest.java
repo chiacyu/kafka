@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.coordinator.group.Assertions.assertUnorderedListEquals;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkAssignment;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkTopicAssignment;
@@ -285,7 +286,7 @@ public class TargetAssignmentBuilderTest {
         assertEquals(new MemberSubscriptionAndAssignmentImpl(
             Optional.of("rackId"),
             Optional.of("instanceId"),
-            new TopicIds(Set.of("bar", "foo", "zar"), topicsImage),
+            new TopicIds(mkSet("bar", "foo", "zar"), topicsImage),
             assignment
         ), subscriptionSpec);
     }

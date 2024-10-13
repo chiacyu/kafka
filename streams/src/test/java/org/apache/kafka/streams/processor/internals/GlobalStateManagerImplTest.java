@@ -27,6 +27,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.utils.LogCaptureAppender;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.errors.DeserializationExceptionHandler;
@@ -250,7 +251,7 @@ public class GlobalStateManagerImplTest {
     @Test
     public void shouldReturnInitializedStoreNames() {
         final Set<String> storeNames = stateManager.initialize();
-        assertEquals(Set.of(storeName1, storeName2, storeName3, storeName4, storeName5), storeNames);
+        assertEquals(Utils.mkSet(storeName1, storeName2, storeName3, storeName4, storeName5), storeNames);
     }
 
     @Test

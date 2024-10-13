@@ -51,6 +51,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -69,7 +70,7 @@ public class DescribeProducersHandlerTest {
     @Test
     public void testBrokerIdSetInOptions() {
         int brokerId = 3;
-        Set<TopicPartition> topicPartitions = Set.of(
+        Set<TopicPartition> topicPartitions = mkSet(
             new TopicPartition("foo", 5),
             new TopicPartition("bar", 3),
             new TopicPartition("foo", 4)
@@ -88,7 +89,7 @@ public class DescribeProducersHandlerTest {
 
     @Test
     public void testBrokerIdNotSetInOptions() {
-        Set<TopicPartition> topicPartitions = Set.of(
+        Set<TopicPartition> topicPartitions = mkSet(
             new TopicPartition("foo", 5),
             new TopicPartition("bar", 3),
             new TopicPartition("foo", 4)
@@ -107,7 +108,7 @@ public class DescribeProducersHandlerTest {
 
     @Test
     public void testBuildRequest() {
-        Set<TopicPartition> topicPartitions = Set.of(
+        Set<TopicPartition> topicPartitions = mkSet(
             new TopicPartition("foo", 5),
             new TopicPartition("bar", 3),
             new TopicPartition("foo", 4)
@@ -122,13 +123,13 @@ public class DescribeProducersHandlerTest {
 
         List<DescribeProducersRequestData.TopicRequest> topics = request.data.topics();
 
-        assertEquals(Set.of("foo", "bar"), topics.stream()
+        assertEquals(mkSet("foo", "bar"), topics.stream()
             .map(DescribeProducersRequestData.TopicRequest::name)
             .collect(Collectors.toSet()));
 
         topics.forEach(topic -> {
             Set<Integer> expectedTopicPartitions = "foo".equals(topic.name()) ?
-                Set.of(4, 5) : Set.of(3);
+                mkSet(4, 5) : mkSet(3);
             assertEquals(expectedTopicPartitions, new HashSet<>(topic.partitionIndexes()));
         });
     }
@@ -139,7 +140,7 @@ public class DescribeProducersHandlerTest {
         Throwable exception = assertFatalError(topicPartition, Errors.TOPIC_AUTHORIZATION_FAILED);
         assertInstanceOf(TopicAuthorizationException.class, exception);
         TopicAuthorizationException authException = (TopicAuthorizationException) exception;
-        assertEquals(Set.of("foo"), authException.unauthorizedTopics());
+        assertEquals(mkSet("foo"), authException.unauthorizedTopics());
     }
 
     @Test
@@ -148,7 +149,7 @@ public class DescribeProducersHandlerTest {
         Throwable exception = assertFatalError(topicPartition, Errors.INVALID_TOPIC_EXCEPTION);
         assertInstanceOf(InvalidTopicException.class, exception);
         InvalidTopicException invalidTopicException = (InvalidTopicException) exception;
-        assertEquals(Set.of("foo"), invalidTopicException.invalidTopics());
+        assertEquals(mkSet("foo"), invalidTopicException.invalidTopics());
     }
 
     @Test
@@ -183,7 +184,7 @@ public class DescribeProducersHandlerTest {
             handleResponseWithError(options, topicPartition, Errors.NOT_LEADER_OR_FOLLOWER);
         assertEquals(emptyMap(), result.completedKeys);
         assertEquals(emptyList(), result.unmappedKeys);
-        assertEquals(Set.of(topicPartition), result.failedKeys.keySet());
+        assertEquals(mkSet(topicPartition), result.failedKeys.keySet());
         Throwable exception = result.failedKeys.get(topicPartition);
         assertInstanceOf(NotLeaderOrFollowerException.class, exception);
     }
@@ -201,9 +202,9 @@ public class DescribeProducersHandlerTest {
         Node node = new Node(3, "host", 1);
 
         ApiResult<TopicPartition, PartitionProducerState> result =
-            handler.handleResponse(node, Set.of(topicPartition), response);
+            handler.handleResponse(node, mkSet(topicPartition), response);
 
-        assertEquals(Set.of(topicPartition), result.completedKeys.keySet());
+        assertEquals(mkSet(topicPartition), result.completedKeys.keySet());
         assertEquals(emptyMap(), result.failedKeys);
         assertEquals(emptyList(), result.unmappedKeys);
 
@@ -230,7 +231,7 @@ public class DescribeProducersHandlerTest {
             new DescribeProducersOptions(), topicPartition, error);
         assertEquals(emptyMap(), result.completedKeys);
         assertEquals(emptyList(), result.unmappedKeys);
-        assertEquals(Set.of(topicPartition), result.failedKeys.keySet());
+        assertEquals(mkSet(topicPartition), result.failedKeys.keySet());
         return result.failedKeys.get(topicPartition);
     }
 
@@ -242,7 +243,7 @@ public class DescribeProducersHandlerTest {
         DescribeProducersHandler handler = newHandler(options);
         DescribeProducersResponse response = buildResponseWithError(topicPartition, error);
         Node node = new Node(options.brokerId().orElse(3), "host", 1);
-        return handler.handleResponse(node, Set.of(topicPartition), response);
+        return handler.handleResponse(node, mkSet(topicPartition), response);
     }
 
     private DescribeProducersResponse buildResponseWithError(

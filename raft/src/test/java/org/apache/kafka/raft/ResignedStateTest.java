@@ -18,6 +18,7 @@ package org.apache.kafka.raft;
 
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
+import org.apache.kafka.common.utils.Utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -63,7 +64,7 @@ class ResignedStateTest {
     @Test
     public void testResignedState() {
         int remoteId = 1;
-        Set<Integer> voters = Set.of(localId, remoteId);
+        Set<Integer> voters = Utils.mkSet(localId, remoteId);
 
         ResignedState state = newResignedState(voters);
 
@@ -87,7 +88,7 @@ class ResignedStateTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     public void testGrantVote(boolean isLogUpToDate) {
-        ResignedState state = newResignedState(Set.of(1, 2, 3));
+        ResignedState state = newResignedState(Utils.mkSet(1, 2, 3));
 
         assertFalse(state.canGrantVote(ReplicaKey.of(1, ReplicaKey.NO_DIRECTORY_ID), isLogUpToDate));
         assertFalse(state.canGrantVote(ReplicaKey.of(2, ReplicaKey.NO_DIRECTORY_ID), isLogUpToDate));
@@ -96,7 +97,7 @@ class ResignedStateTest {
 
     @Test
     void testNegativeScenarioAcknowledgeResignation() {
-        Set<Integer> voters = Set.of(0, 1, 2, 3, 4, 5);
+        Set<Integer> voters = Utils.mkSet(0, 1, 2, 3, 4, 5);
 
         ResignedState state = newResignedState(voters);
 
@@ -109,7 +110,7 @@ class ResignedStateTest {
 
     @Test
     void testLeaderEndpoints() {
-        ResignedState state = newResignedState(Set.of(1, 2, 3));
+        ResignedState state = newResignedState(Utils.mkSet(1, 2, 3));
 
         assertEquals(localEndpoints, state.leaderEndpoints());
         assertNotEquals(Endpoints.empty(), state.leaderEndpoints());

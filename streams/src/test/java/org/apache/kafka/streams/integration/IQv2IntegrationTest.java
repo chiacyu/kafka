@@ -78,6 +78,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.Collections.singleton;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.streams.query.StateQueryRequest.inStore;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -210,7 +211,7 @@ public class IQv2IntegrationTest {
         final KeyQuery<Integer, ValueAndTimestamp<Integer>> query = KeyQuery.withKey(1);
         final StateQueryRequest<ValueAndTimestamp<Integer>> request =
             inStore(STORE_NAME).withQuery(query).requireActive();
-        final Set<Integer> partitions = Set.of(0, 1);
+        final Set<Integer> partitions = mkSet(0, 1);
 
         kafkaStreams.start();
 
@@ -278,7 +279,7 @@ public class IQv2IntegrationTest {
     @Test
     public void shouldFetchExplicitlyFromAllPartitions() {
         final KeyQuery<Integer, ValueAndTimestamp<Integer>> query = KeyQuery.withKey(1);
-        final Set<Integer> partitions = Set.of(0, 1);
+        final Set<Integer> partitions = mkSet(0, 1);
         final StateQueryRequest<ValueAndTimestamp<Integer>> request =
             inStore(STORE_NAME).withQuery(query).withAllPartitions();
 

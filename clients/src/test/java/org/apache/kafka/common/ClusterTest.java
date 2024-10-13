@@ -16,6 +16,8 @@
  */
 package org.apache.kafka.common;
 
+import org.apache.kafka.common.utils.Utils;
+
 import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
@@ -54,7 +56,7 @@ public class ClusterTest {
             new InetSocketAddress(ipAddress, 9002),
             new InetSocketAddress(hostName, 9002)
         ));
-        Set<String> expectedHosts = Set.of(ipAddress, hostName);
+        Set<String> expectedHosts = Utils.mkSet(ipAddress, hostName);
         Set<String> actualHosts = new HashSet<>();
         for (Node node : cluster.nodes())
             actualHosts.add(node.host());
@@ -72,9 +74,9 @@ public class ClusterTest {
             new PartitionInfo(TOPIC_D, 0, NODES[1], NODES, NODES),
             new PartitionInfo(TOPIC_E, 0, NODES[0], NODES, NODES)
         );
-        Set<String> unauthorizedTopics = Set.of(TOPIC_C);
-        Set<String> invalidTopics = Set.of(TOPIC_D);
-        Set<String> internalTopics = Set.of(TOPIC_E);
+        Set<String> unauthorizedTopics = Utils.mkSet(TOPIC_C);
+        Set<String> invalidTopics = Utils.mkSet(TOPIC_D);
+        Set<String> internalTopics = Utils.mkSet(TOPIC_E);
         Cluster cluster = new Cluster("clusterId", asList(NODES), allPartitions, unauthorizedTopics,
             invalidTopics, internalTopics, NODES[1]);
 

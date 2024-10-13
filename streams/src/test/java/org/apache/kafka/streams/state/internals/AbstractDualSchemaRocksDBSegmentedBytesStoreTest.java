@@ -30,6 +30,7 @@ import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
 import org.apache.kafka.common.utils.Time;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.StreamsConfig.InternalConfig;
@@ -1136,7 +1137,7 @@ public abstract class AbstractDualSchemaRocksDBSegmentedBytesStoreTest {
         assertEquals(Collections.singleton(segments.segmentName(0)), segmentDirs());
 
         bytesStore.put(serializeKey(new Windowed<>(key, windows[3])), serializeValue(1000));
-        assertEquals(Set.of(segments.segmentName(0), segments.segmentName(1)), segmentDirs());
+        assertEquals(Utils.mkSet(segments.segmentName(0), segments.segmentName(1)), segmentDirs());
 
         final List<KeyValue<Windowed<String>, Long>> results = toList(bytesStore.fetch(Bytes.wrap(key.getBytes()), 0, 1500));
 
@@ -1173,7 +1174,7 @@ public abstract class AbstractDualSchemaRocksDBSegmentedBytesStoreTest {
 
         bytesStore.put(serializeKey(new Windowed<>(keyB, windows[3])), serializeValue(100L));
         assertEquals(
-            Set.of(
+            Utils.mkSet(
                 segments.segmentName(0),
                 segments.segmentName(1)
             ),
@@ -1206,7 +1207,7 @@ public abstract class AbstractDualSchemaRocksDBSegmentedBytesStoreTest {
 
         bytesStore.put(serializeKey(new Windowed<>(keyB, windows[3])), serializeValue(100L));
         assertEquals(
-            Set.of(
+            Utils.mkSet(
                 segments.segmentName(0),
                 segments.segmentName(1)
             ),
@@ -1237,7 +1238,7 @@ public abstract class AbstractDualSchemaRocksDBSegmentedBytesStoreTest {
 
         bytesStore.put(serializeKey(new Windowed<>(key, windows[3])), serializeValue(100L));
         assertEquals(
-            Set.of(
+            Utils.mkSet(
                 segments.segmentName(0),
                 segments.segmentName(1)
             ),
@@ -1697,7 +1698,7 @@ public abstract class AbstractDualSchemaRocksDBSegmentedBytesStoreTest {
     private Set<String> segmentDirs() {
         final File windowDir = new File(stateDir, storeName);
 
-        return Set.of(Objects.requireNonNull(windowDir.list()));
+        return Utils.mkSet(Objects.requireNonNull(windowDir.list()));
     }
 
     private Bytes serializeKey(final Windowed<String> key) {

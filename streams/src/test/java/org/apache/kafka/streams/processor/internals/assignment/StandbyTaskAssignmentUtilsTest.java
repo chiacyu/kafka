@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_0;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_1;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_2;
@@ -47,7 +48,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 public class StandbyTaskAssignmentUtilsTest {
 
-    private static final Set<TaskId> ACTIVE_TASKS = Set.of(TASK_0_0, TASK_0_1, TASK_0_2);
+    private static final Set<TaskId> ACTIVE_TASKS = mkSet(TASK_0_0, TASK_0_1, TASK_0_2);
 
     private Map<ProcessId, ClientState> clients;
     private ConstrainedPrioritySet clientsByTaskLoad;

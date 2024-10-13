@@ -18,6 +18,7 @@ package org.apache.kafka.streams.kstream.internals;
 
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import org.apache.kafka.common.utils.Bytes;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.errors.TopologyException;
@@ -211,7 +212,7 @@ public class InternalStreamsBuilderTest {
         final List<StateStore> stateStores = topology.globalStateStores();
         final Set<String> sourceTopics = topology.sourceTopics();
 
-        assertEquals(Set.of("table", "table2"), sourceTopics);
+        assertEquals(Utils.mkSet("table", "table2"), sourceTopics);
         assertEquals(2, stateStores.size());
     }
 

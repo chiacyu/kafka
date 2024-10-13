@@ -21,8 +21,7 @@ import org.apache.kafka.streams.processor.assignment.KafkaStreamsAssignment.Assi
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_0;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_1;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.TASK_0_2;
@@ -35,7 +34,7 @@ public class KafkaStreamsAssignmentTest {
     public void shouldHaveReadableString() {
         final KafkaStreamsAssignment assignment = KafkaStreamsAssignment.of(
             processIdForInt(1),
-            Set.of(
+            mkSet(
                 new AssignedTask(TASK_0_0, AssignedTask.Type.ACTIVE),
                 new AssignedTask(TASK_0_1, AssignedTask.Type.STANDBY),
                 new AssignedTask(TASK_0_2, AssignedTask.Type.ACTIVE)

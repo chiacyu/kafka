@@ -20,6 +20,7 @@ import org.apache.kafka.common.Uuid;
 import org.apache.kafka.common.network.ListenerName;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.raft.internals.BatchAccumulator;
 import org.apache.kafka.raft.internals.KRaftControlRecordStateMachine;
 import org.apache.kafka.server.common.Features;
@@ -292,8 +293,8 @@ public class QuorumStateTest {
             ElectionState.withVotedCandidate(epoch, localVoterKey, voters.voterIds()),
             candidateState.election()
         );
-        assertEquals(Set.of(node1, node2), candidateState.unrecordedVoters());
-        assertEquals(Set.of(localId), candidateState.grantingVoters());
+        assertEquals(Utils.mkSet(node1, node2), candidateState.unrecordedVoters());
+        assertEquals(Utils.mkSet(localId), candidateState.grantingVoters());
         assertEquals(Collections.emptySet(), candidateState.rejectingVoters());
         assertEquals(
             electionTimeoutMs + jitterMs,
@@ -327,7 +328,7 @@ public class QuorumStateTest {
         ResignedState resignedState = state.resignedStateOrThrow();
         assertEquals(epoch, resignedState.epoch());
         assertEquals(election, resignedState.election());
-        assertEquals(Set.of(node1, node2), resignedState.unackedVoters());
+        assertEquals(Utils.mkSet(node1, node2), resignedState.unackedVoters());
         assertEquals(electionTimeoutMs + jitterMs,
             resignedState.remainingElectionTimeMs(time.milliseconds()));
     }

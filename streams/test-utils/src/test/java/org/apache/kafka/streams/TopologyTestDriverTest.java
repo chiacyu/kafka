@@ -78,6 +78,7 @@ import java.util.regex.Pattern;
 import static org.apache.kafka.common.utils.Utils.mkEntry;
 import static org.apache.kafka.common.utils.Utils.mkMap;
 import static org.apache.kafka.common.utils.Utils.mkProperties;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -502,7 +503,7 @@ public abstract class TopologyTestDriverTest {
         pipeRecord(SOURCE_TOPIC_1, testRecord1);
         assertThat(
             testDriver.producedTopicNames(),
-            equalTo(Set.of(
+            equalTo(mkSet(
                 config.getProperty(StreamsConfig.APPLICATION_ID_CONFIG) + "-table1-repartition",
                 config.getProperty(StreamsConfig.APPLICATION_ID_CONFIG) + "-table1-changelog"
             ))
@@ -511,7 +512,7 @@ public abstract class TopologyTestDriverTest {
         pipeRecord(SOURCE_TOPIC_2, testRecord1);
         assertThat(
             testDriver.producedTopicNames(),
-            equalTo(Set.of(
+            equalTo(mkSet(
                 config.getProperty(StreamsConfig.APPLICATION_ID_CONFIG) + "-table1-repartition",
                 config.getProperty(StreamsConfig.APPLICATION_ID_CONFIG) + "-table1-changelog",
                 config.getProperty(StreamsConfig.APPLICATION_ID_CONFIG) + "-table2-changelog",

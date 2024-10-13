@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -54,7 +55,7 @@ public class PartitionLeaderStrategyTest {
 
     @Test
     public void testBuildLookupRequest() {
-        Set<TopicPartition> topicPartitions = Set.of(
+        Set<TopicPartition> topicPartitions = mkSet(
             new TopicPartition("foo", 0),
             new TopicPartition("bar", 0),
             new TopicPartition("foo", 1),
@@ -64,13 +65,13 @@ public class PartitionLeaderStrategyTest {
         PartitionLeaderStrategy strategy = newStrategy();
 
         MetadataRequest allRequest = strategy.buildRequest(topicPartitions).build();
-        assertEquals(Set.of("foo", "bar", "baz"), new HashSet<>(allRequest.topics()));
+        assertEquals(mkSet("foo", "bar", "baz"), new HashSet<>(allRequest.topics()));
         assertFalse(allRequest.allowAutoTopicCreation());
 
         MetadataRequest partialRequest = strategy.buildRequest(
             topicPartitions.stream().filter(tp -> tp.topic().equals("foo")).collect(Collectors.toSet())
         ).build();
-        assertEquals(Set.of("foo"), new HashSet<>(partialRequest.topics()));
+        assertEquals(mkSet("foo"), new HashSet<>(partialRequest.topics()));
         assertFalse(partialRequest.allowAutoTopicCreation());
     }
 
@@ -80,7 +81,7 @@ public class PartitionLeaderStrategyTest {
         Throwable exception = assertFatalTopicError(topicPartition, Errors.TOPIC_AUTHORIZATION_FAILED);
         assertInstanceOf(TopicAuthorizationException.class, exception);
         TopicAuthorizationException authException = (TopicAuthorizationException) exception;
-        assertEquals(Set.of("foo"), authException.unauthorizedTopics());
+        assertEquals(mkSet("foo"), authException.unauthorizedTopics());
     }
 
     @Test
@@ -89,7 +90,7 @@ public class PartitionLeaderStrategyTest {
         Throwable exception = assertFatalTopicError(topicPartition, Errors.INVALID_TOPIC_EXCEPTION);
         assertInstanceOf(InvalidTopicException.class, exception);
         InvalidTopicException invalidTopicException = (InvalidTopicException) exception;
-        assertEquals(Set.of("foo"), invalidTopicException.invalidTopics());
+        assertEquals(mkSet("foo"), invalidTopicException.invalidTopics());
     }
 
     @Test
@@ -136,12 +137,12 @@ public class PartitionLeaderStrategyTest {
             topicPartition2, 1, Arrays.asList(2, 1, 3)));
 
         LookupResult<TopicPartition> result = handleLookupResponse(
-            Set.of(topicPartition1, topicPartition2),
+            mkSet(topicPartition1, topicPartition2),
             responseWithPartitionData(responsePartitions)
         );
 
         assertEquals(emptyMap(), result.failedKeys);
-        assertEquals(Set.of(topicPartition1, topicPartition2), result.mappedKeys.keySet());
+        assertEquals(mkSet(topicPartition1, topicPartition2), result.mappedKeys.keySet());
         assertEquals(5, result.mappedKeys.get(topicPartition1));
         assertEquals(1, result.mappedKeys.get(topicPartition2));
     }
@@ -158,12 +159,12 @@ public class PartitionLeaderStrategyTest {
             unrequestedTopicPartition, Errors.UNKNOWN_SERVER_ERROR));
 
         LookupResult<TopicPartition> result = handleLookupResponse(
-            Set.of(requestedTopicPartition),
+            mkSet(requestedTopicPartition),
             responseWithPartitionData(responsePartitions)
         );
 
         assertEquals(emptyMap(), result.failedKeys);
-        assertEquals(Set.of(requestedTopicPartition), result.mappedKeys.keySet());
+        assertEquals(mkSet(requestedTopicPartition), result.mappedKeys.keySet());
         assertEquals(5, result.mappedKeys.get(requestedTopicPartition));
     }
 
@@ -177,7 +178,7 @@ public class PartitionLeaderStrategyTest {
         );
 
         LookupResult<TopicPartition> result = handleLookupResponse(
-            Set.of(topicPartition),
+            mkSet(topicPartition),
             responseWithPartitionData(responsePartitions)
         );
 
@@ -231,7 +232,7 @@ public class PartitionLeaderStrategyTest {
         TopicPartition topicPartition,
         MetadataResponse response
     ) {
-        LookupResult<TopicPartition> result = handleLookupResponse(Set.of(topicPartition), response);
+        LookupResult<TopicPartition> result = handleLookupResponse(mkSet(topicPartition), response);
         assertEquals(emptyMap(), result.failedKeys);
         assertEquals(emptyMap(), result.mappedKeys);
     }
@@ -240,8 +241,8 @@ public class PartitionLeaderStrategyTest {
         TopicPartition topicPartition,
         MetadataResponse response
     ) {
-        LookupResult<TopicPartition> result = handleLookupResponse(Set.of(topicPartition), response);
-        assertEquals(Set.of(topicPartition), result.failedKeys.keySet());
+        LookupResult<TopicPartition> result = handleLookupResponse(mkSet(topicPartition), response);
+        assertEquals(mkSet(topicPartition), result.failedKeys.keySet());
         return result.failedKeys.get(topicPartition);
     }
 

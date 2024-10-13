@@ -17,6 +17,7 @@
 package org.apache.kafka.common.network;
 
 import org.apache.kafka.common.config.SslConfigs;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.test.TestSslUtils;
 import org.apache.kafka.test.TestSslUtils.SslConfigsBuilder;
 import org.apache.kafka.test.TestUtils;
@@ -31,7 +32,7 @@ import java.util.Set;
 
 public class CertStores {
 
-    public static final Set<String> KEYSTORE_PROPS = Set.of(
+    public static final Set<String> KEYSTORE_PROPS = Utils.mkSet(
             SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG,
             SslConfigs.SSL_KEYSTORE_TYPE_CONFIG,
             SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG,
@@ -39,7 +40,7 @@ public class CertStores {
             SslConfigs.SSL_KEYSTORE_KEY_CONFIG,
             SslConfigs.SSL_KEYSTORE_CERTIFICATE_CHAIN_CONFIG);
 
-    public static final Set<String> TRUSTSTORE_PROPS = Set.of(
+    public static final Set<String> TRUSTSTORE_PROPS = Utils.mkSet(
             SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
             SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG,
             SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG,

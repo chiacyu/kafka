@@ -19,6 +19,7 @@ package org.apache.kafka.raft;
 import org.apache.kafka.common.network.ListenerName;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.MockTime;
+import org.apache.kafka.common.utils.Utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,7 +67,7 @@ public class FollowerStateTest {
 
     @Test
     public void testFetchTimeoutExpiration() {
-        FollowerState state = newFollowerState(Set.of(1, 2, 3), Optional.empty());
+        FollowerState state = newFollowerState(Utils.mkSet(1, 2, 3), Optional.empty());
 
         assertFalse(state.hasFetchTimeoutExpired(time.milliseconds()));
         assertEquals(fetchTimeoutMs, state.remainingFetchTimeMs(time.milliseconds()));
@@ -82,7 +83,7 @@ public class FollowerStateTest {
 
     @Test
     public void testMonotonicHighWatermark() {
-        FollowerState state = newFollowerState(Set.of(1, 2, 3), Optional.empty());
+        FollowerState state = newFollowerState(Utils.mkSet(1, 2, 3), Optional.empty());
 
         OptionalLong highWatermark = OptionalLong.of(15L);
         state.updateHighWatermark(highWatermark);
@@ -96,7 +97,7 @@ public class FollowerStateTest {
     @ValueSource(booleans = {true, false})
     public void testGrantVote(boolean isLogUpToDate) {
         FollowerState state = newFollowerState(
-            Set.of(1, 2, 3),
+            Utils.mkSet(1, 2, 3),
             Optional.empty()
         );
 
@@ -107,7 +108,7 @@ public class FollowerStateTest {
 
     @Test
     public void testLeaderIdAndEndpoint() {
-        FollowerState state = newFollowerState(Set.of(0, 1, 2), Optional.empty());
+        FollowerState state = newFollowerState(Utils.mkSet(0, 1, 2), Optional.empty());
 
         assertEquals(leaderId, state.leaderId());
         assertEquals(leaderEndpoints, state.leaderEndpoints());

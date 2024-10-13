@@ -30,6 +30,7 @@ import org.apache.kafka.common.security.ssl.DefaultSslEngineFactory.SecurityStor
 import org.apache.kafka.common.security.ssl.mock.TestKeyManagerFactory;
 import org.apache.kafka.common.security.ssl.mock.TestProviderCreator;
 import org.apache.kafka.common.security.ssl.mock.TestTrustManagerFactory;
+import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.test.TestSslUtils;
 import org.apache.kafka.test.TestUtils;
 
@@ -46,7 +47,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -81,7 +81,7 @@ public abstract class SslFactoryTest {
             //host and port are hints
             SSLEngine engine = sslFactory.createSslEngine("localhost", 0);
             assertNotNull(engine);
-            assertEquals(Set.of(tlsProtocol), Set.of(engine.getEnabledProtocols()));
+            assertEquals(Utils.mkSet(tlsProtocol), Utils.mkSet(engine.getEnabledProtocols()));
             assertFalse(engine.getUseClientMode());
         }
     }
@@ -95,7 +95,7 @@ public abstract class SslFactoryTest {
             sslFactory.configure(serverSslConfig);
             SSLEngine engine = sslFactory.createSslEngine("localhost", 0);
             assertNotNull(engine);
-            assertEquals(Set.of(tlsProtocol), Set.of(engine.getEnabledProtocols()));
+            assertEquals(Utils.mkSet(tlsProtocol), Utils.mkSet(engine.getEnabledProtocols()));
             assertFalse(engine.getUseClientMode());
         }
     }

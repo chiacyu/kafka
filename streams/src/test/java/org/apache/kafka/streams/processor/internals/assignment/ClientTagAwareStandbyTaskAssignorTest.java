@@ -37,6 +37,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.apache.kafka.common.utils.Utils.mkEntry;
 import static org.apache.kafka.common.utils.Utils.mkMap;
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.PID_1;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.PID_2;
 import static org.apache.kafka.streams.processor.internals.assignment.AssignmentTestUtils.PID_3;
@@ -83,7 +84,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
 
     @Test
     public void shouldNotAssignStatelessTasksToAnyClients() {
-        final Set<TaskId> statefulTasks = Set.of(
+        final Set<TaskId> statefulTasks = mkSet(
             TASK_1_0,
             TASK_1_1,
             TASK_1_2
@@ -118,7 +119,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
     @Test
     public void shouldRemoveClientToRemainingStandbysAndNotPopulatePendingStandbyTasksToClientIdWhenAllStandbyTasksWereAssigned() {
         final int numStandbyReplicas = 2;
-        final Set<String> rackAwareAssignmentTags = Set.of(ZONE_TAG, CLUSTER_TAG);
+        final Set<String> rackAwareAssignmentTags = mkSet(ZONE_TAG, CLUSTER_TAG);
         final Map<ProcessId, ClientState> clientStates = mkMap(
             mkEntry(PID_1, createClientStateWithCapacity(PID_1, 2, mkMap(mkEntry(ZONE_TAG, ZONE_1), mkEntry(CLUSTER_TAG, CLUSTER_1)), TASK_0_0)),
             mkEntry(PID_2, createClientStateWithCapacity(PID_2, 2, mkMap(mkEntry(ZONE_TAG, ZONE_1), mkEntry(CLUSTER_TAG, CLUSTER_2)), TASK_0_1)),
@@ -160,7 +161,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
 
     @Test
     public void shouldUpdateClientToRemainingStandbysAndPendingStandbyTasksToClientIdWhenNotAllStandbyTasksWereAssigned() {
-        final Set<String> rackAwareAssignmentTags = Set.of(ZONE_TAG, CLUSTER_TAG);
+        final Set<String> rackAwareAssignmentTags = mkSet(ZONE_TAG, CLUSTER_TAG);
         final Map<ProcessId, ClientState> clientStates = mkMap(
             mkEntry(PID_1, createClientStateWithCapacity(PID_1, 2, mkMap(mkEntry(ZONE_TAG, ZONE_1), mkEntry(CLUSTER_TAG, CLUSTER_1)), TASK_0_0)),
             mkEntry(PID_2, createClientStateWithCapacity(PID_2, 2, mkMap(mkEntry(ZONE_TAG, ZONE_1), mkEntry(CLUSTER_TAG, CLUSTER_2)), TASK_0_1)),
@@ -314,7 +315,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_0,
                 clientStates,
                 asList(
-                    Set.of(PID_9, PID_5), Set.of(PID_6, PID_8)
+                    mkSet(PID_9, PID_5), mkSet(PID_6, PID_8)
                 )
             )
         );
@@ -323,7 +324,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_0,
                 clientStates,
                 asList(
-                    Set.of(PID_9, PID_5), Set.of(PID_6, PID_8)
+                    mkSet(PID_9, PID_5), mkSet(PID_6, PID_8)
                 )
             )
         );
@@ -333,7 +334,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_1,
                 clientStates,
                 asList(
-                    Set.of(PID_2, PID_9), Set.of(PID_3, PID_8)
+                    mkSet(PID_2, PID_9), mkSet(PID_3, PID_8)
                 )
             )
         );
@@ -342,7 +343,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_1,
                 clientStates,
                 asList(
-                    Set.of(PID_2, PID_9), Set.of(PID_3, PID_8)
+                    mkSet(PID_2, PID_9), mkSet(PID_3, PID_8)
                 )
             )
         );
@@ -352,7 +353,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_2,
                 clientStates,
                 asList(
-                    Set.of(PID_5, PID_3), Set.of(PID_2, PID_6)
+                    mkSet(PID_5, PID_3), mkSet(PID_2, PID_6)
                 )
             )
         );
@@ -361,7 +362,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_2,
                 clientStates,
                 asList(
-                    Set.of(PID_5, PID_3), Set.of(PID_2, PID_6)
+                    mkSet(PID_5, PID_3), mkSet(PID_2, PID_6)
                 )
             )
         );
@@ -436,14 +437,14 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                     containsStandbyTasks(
                         TASK_0_0,
                         cs,
-                        Set.of(PID_2, PID_3, PID_5, PID_6, PID_8, PID_9)
+                        mkSet(PID_2, PID_3, PID_5, PID_6, PID_8, PID_9)
                     )
                 );
                 assertTrue(
                     containsStandbyTasks(
                         TASK_1_0,
                         cs,
-                        Set.of(PID_2, PID_3, PID_5, PID_6, PID_8, PID_9)
+                        mkSet(PID_2, PID_3, PID_5, PID_6, PID_8, PID_9)
                     )
                 );
 
@@ -451,14 +452,14 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                     containsStandbyTasks(
                         TASK_0_1,
                         cs,
-                        Set.of(PID_1, PID_3, PID_4, PID_6, PID_7, PID_9)
+                        mkSet(PID_1, PID_3, PID_4, PID_6, PID_7, PID_9)
                     )
                 );
                 assertTrue(
                     containsStandbyTasks(
                         TASK_1_1,
                         cs,
-                        Set.of(PID_1, PID_3, PID_4, PID_6, PID_7, PID_9)
+                        mkSet(PID_1, PID_3, PID_4, PID_6, PID_7, PID_9)
                     )
                 );
 
@@ -466,14 +467,14 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                     containsStandbyTasks(
                         TASK_0_2,
                         cs,
-                        Set.of(PID_1, PID_2, PID_4, PID_5, PID_7, PID_8)
+                        mkSet(PID_1, PID_2, PID_4, PID_5, PID_7, PID_8)
                     )
                 );
                 assertTrue(
                     containsStandbyTasks(
                         TASK_1_2,
                         cs,
-                        Set.of(PID_1, PID_2, PID_4, PID_5, PID_7, PID_8)
+                        mkSet(PID_1, PID_2, PID_4, PID_5, PID_7, PID_8)
                     )
                 );
             }
@@ -512,7 +513,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_0,
                 clientStates,
                 asList(
-                    Set.of(PID_9, PID_5), Set.of(PID_6, PID_8)
+                    mkSet(PID_9, PID_5), mkSet(PID_6, PID_8)
                 )
             )
         );
@@ -521,7 +522,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_0,
                 clientStates,
                 asList(
-                    Set.of(PID_9, PID_5), Set.of(PID_6, PID_8)
+                    mkSet(PID_9, PID_5), mkSet(PID_6, PID_8)
                 )
             )
         );
@@ -531,7 +532,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_1,
                 clientStates,
                 asList(
-                    Set.of(PID_4, PID_9), Set.of(PID_6, PID_7)
+                    mkSet(PID_4, PID_9), mkSet(PID_6, PID_7)
                 )
             )
         );
@@ -540,7 +541,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_1,
                 clientStates,
                 asList(
-                    Set.of(PID_4, PID_9), Set.of(PID_6, PID_7)
+                    mkSet(PID_4, PID_9), mkSet(PID_6, PID_7)
                 )
             )
         );
@@ -550,7 +551,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_2,
                 clientStates,
                 asList(
-                    Set.of(PID_5, PID_7), Set.of(PID_4, PID_8)
+                    mkSet(PID_5, PID_7), mkSet(PID_4, PID_8)
                 )
             )
         );
@@ -559,7 +560,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_2,
                 clientStates,
                 asList(
-                    Set.of(PID_5, PID_7), Set.of(PID_4, PID_8)
+                    mkSet(PID_5, PID_7), mkSet(PID_4, PID_8)
                 )
             )
         );
@@ -609,8 +610,8 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                     // For the 2nd standby, either `PID_3` or `PID_6` are valid destinations as
                     // we need to distribute the clients on different `zone`
                     // tags without considering the `cluster` tag value.
-                    Set.of(PID_5, PID_3),
-                    Set.of(PID_5, PID_6)
+                    mkSet(PID_5, PID_3),
+                    mkSet(PID_5, PID_6)
                 )
             )
         );
@@ -623,8 +624,8 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                     // `PID_2` is the ideal distribution on different `cluster`
                     // and `zone` tag dimensions. In contrast, `PID_4` and `PID_1`
                     // satisfy only the partial rack awareness as they are located on a different `zone` tag dimension.
-                    Set.of(PID_2, PID_4),
-                    Set.of(PID_2, PID_1)
+                    mkSet(PID_2, PID_4),
+                    mkSet(PID_2, PID_1)
                 )
             )
         );
@@ -654,7 +655,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_0,
                 clientStates,
                 asList(
-                    Set.of(PID_2), Set.of(PID_5), Set.of(PID_3), Set.of(PID_6)
+                    mkSet(PID_2), mkSet(PID_5), mkSet(PID_3), mkSet(PID_6)
                 )
             )
         );
@@ -663,7 +664,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_0,
                 clientStates,
                 asList(
-                    Set.of(PID_2), Set.of(PID_5), Set.of(PID_3), Set.of(PID_6)
+                    mkSet(PID_2), mkSet(PID_5), mkSet(PID_3), mkSet(PID_6)
                 )
             )
         );
@@ -673,7 +674,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_1,
                 clientStates,
                 asList(
-                    Set.of(PID_1), Set.of(PID_4), Set.of(PID_3), Set.of(PID_6)
+                    mkSet(PID_1), mkSet(PID_4), mkSet(PID_3), mkSet(PID_6)
                 )
             )
         );
@@ -682,7 +683,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_1,
                 clientStates,
                 asList(
-                    Set.of(PID_1), Set.of(PID_4), Set.of(PID_3), Set.of(PID_6)
+                    mkSet(PID_1), mkSet(PID_4), mkSet(PID_3), mkSet(PID_6)
                 )
             )
         );
@@ -692,7 +693,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_2,
                 clientStates,
                 asList(
-                    Set.of(PID_1), Set.of(PID_4), Set.of(PID_2), Set.of(PID_5)
+                    mkSet(PID_1), mkSet(PID_4), mkSet(PID_2), mkSet(PID_5)
                 )
             )
         );
@@ -701,7 +702,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_1_2,
                 clientStates,
                 asList(
-                    Set.of(PID_1), Set.of(PID_4), Set.of(PID_2), Set.of(PID_5)
+                    mkSet(PID_1), mkSet(PID_4), mkSet(PID_2), mkSet(PID_5)
                 )
             )
         );
@@ -743,7 +744,7 @@ public class ClientTagAwareStandbyTaskAssignorTest {
                 TASK_0_0,
                 clientStates,
                 singletonList(
-                    Set.of(PID_2)
+                    mkSet(PID_2)
                 )
             )
         );

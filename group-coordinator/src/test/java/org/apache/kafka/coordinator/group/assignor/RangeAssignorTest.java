@@ -39,6 +39,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static org.apache.kafka.common.utils.Utils.mkSet;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.invertedTargetAssignment;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkAssignment;
 import static org.apache.kafka.coordinator.group.AssignmentTestUtil.mkTopicAssignment;
@@ -119,7 +120,7 @@ public class RangeAssignorTest {
             new MemberSubscriptionAndAssignmentImpl(
                 Optional.empty(),
                 Optional.empty(),
-                Set.of(topic2Uuid),
+                mkSet(topic2Uuid),
                 Assignment.EMPTY
             )
         );
@@ -153,14 +154,14 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
@@ -213,21 +214,21 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             Assignment.EMPTY
         ));
 
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic3Uuid),
+            mkSet(topic3Uuid),
             Assignment.EMPTY
         ));
 
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic2Uuid, topic3Uuid),
+            mkSet(topic2Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
@@ -278,21 +279,21 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic3Uuid),
             Assignment.EMPTY
         ));
 
@@ -498,7 +499,7 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 0),
                 mkTopicAssignment(topic2Uuid, 0)
@@ -508,7 +509,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 1),
                 mkTopicAssignment(topic2Uuid, 1)
@@ -519,7 +520,7 @@ public class RangeAssignorTest {
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             Assignment.EMPTY
         ));
 
@@ -570,7 +571,7 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 0, 1),
                 mkTopicAssignment(topic2Uuid, 0, 1)
@@ -580,7 +581,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 2),
                 mkTopicAssignment(topic2Uuid, 2)
@@ -631,7 +632,7 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 0, 1),
                 mkTopicAssignment(topic2Uuid, 0, 1)
@@ -641,7 +642,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 2),
                 mkTopicAssignment(topic2Uuid, 2)
@@ -652,7 +653,7 @@ public class RangeAssignorTest {
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             Assignment.EMPTY
         ));
 
@@ -705,7 +706,7 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 0, 1),
                 mkTopicAssignment(topic2Uuid, 0, 1)
@@ -715,7 +716,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 2),
                 mkTopicAssignment(topic2Uuid, 2)
@@ -726,7 +727,7 @@ public class RangeAssignorTest {
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid),
+            mkSet(topic1Uuid),
             Assignment.EMPTY
         ));
 
@@ -779,7 +780,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid),
+            mkSet(topic1Uuid, topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 2),
                 mkTopicAssignment(topic2Uuid, 2)
@@ -833,7 +834,7 @@ public class RangeAssignorTest {
         members.put(memberA, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid),
+            mkSet(topic1Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic1Uuid, 0, 1, 2),
                 mkTopicAssignment(topic2Uuid, 0)
@@ -843,7 +844,7 @@ public class RangeAssignorTest {
         members.put(memberB, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic1Uuid, topic2Uuid, topic3Uuid),
+            mkSet(topic1Uuid, topic2Uuid, topic3Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic2Uuid, 1)
             ))
@@ -852,7 +853,7 @@ public class RangeAssignorTest {
         members.put(memberC, new MemberSubscriptionAndAssignmentImpl(
             Optional.empty(),
             Optional.empty(),
-            Set.of(topic2Uuid),
+            mkSet(topic2Uuid),
             new Assignment(mkAssignment(
                 mkTopicAssignment(topic2Uuid, 2),
                 mkTopicAssignment(topic3Uuid, 0, 1)
